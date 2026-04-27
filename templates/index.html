@@ -3,60 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Invoice</title>
+    <title>Invoice Reconstruction</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
         }
         .container {
             display: flex;
             flex-direction: column;
             gap: 20px;
-            max-width: 1400px;
+            max-width: 1800px; /* Increased max-width for four columns */
             margin: 0 auto;
         }
         .upload-section {
-            width: 100%;
-            border: 1px solid #ccc;
+            background-color: #fff;
             padding: 20px;
-            box-sizing: border-box;
-            background-color: #f9f9f9;
             border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .display-section {
+        .main-content {
             display: flex;
             gap: 20px;
-            width: 100%;
         }
         .column {
             flex: 1;
-            border: 1px solid #ccc;
-            padding: 10px;
-            min-height: 500px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+        .html-columns {
+            display: flex;
+            gap: 20px;
+        }
+        .html-column {
+            flex: 1;
             background-color: #fff;
+            padding: 20px;
             border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         img, embed {
             max-width: 100%;
             height: 600px;
-            margin-bottom: 10px;
-        }
-        .html-sections {
-            display: flex;
-            gap: 20px;
-            width: 100%;
-        }
-        .html-section {
-            flex: 1;
-            border: 1px solid #ccc;
-            padding: 10px;
-            box-sizing: border-box;
-            background-color: #fff;
-            border-radius: 8px;
+            border: 1px solid #ddd;
         }
         pre {
             background-color: #272822;
@@ -66,89 +64,120 @@
             white-space: pre-wrap;
             word-wrap: break-word;
             width: 100%;
-            height: 400px;
+            height: 500px;
             overflow-y: auto;
-            box-sizing: border-box;
             font-size: 13px;
+            box-sizing: border-box;
         }
         .error-message {
             color: red;
             font-weight: bold;
+            margin-top: 10px;
+        }
+        a {
+            color: #0066cc;
+            text-decoration: none;
+            margin-top: 10px;
+            display: inline-block;
+        }
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
 
-    <h1>Invoice Upload and AI Processing</h1>
-
     <div class="container">
+        <h1>Invoice Reconstruction</h1>
+
         <div class="upload-section">
-            <h2>Upload an Invoice</h2>
+            <h2>Upload an Invoice Image or PDF</h2>
             <form action="/upload" method="post" enctype="multipart/form-data">
                 <input type="file" name="file" accept="image/*,application/pdf" required>
-                <button type="submit">Upload & Process</button>
+                <button type="submit">Process Document</button>
             </form>
             {% if error %}
-                <p class="error-message">{{ error }}</p>
+                <div class="error-message">{{ error }}</div>
             {% endif %}
         </div>
 
         {% if filename %}
-        <div class="display-section">
-            <!-- 1. Original Upload -->
+        <div class="main-content">
+            <!-- Column 1: Original Image -->
             <div class="column">
-                <h3>Original Upload</h3>
+                <h2>Original Document</h2>
                 {% if filename.lower().endswith('.pdf') %}
-                    <embed src="/uploads/{{ filename }}" type="application/pdf" width="100%" height="600px" />
+                    <embed src="{{ url_for('uploaded_file', filename=filename) }}" type="application/pdf" width="100%" />
                 {% else %}
-                    <img src="/uploads/{{ filename }}" alt="Uploaded Invoice">
+                    <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Invoice">
                 {% endif %}
             </div>
 
-            <!-- 2. Reconstructed PDF -->
+            <!-- Column 2: Reconstructed PDF (Full Data) -->
             <div class="column">
-                <h3>Reconstructed PDF</h3>
+                <h2>Reconstructed PDF (Data)</h2>
                 {% if generated_pdf %}
-                    <embed src="/uploads/{{ generated_pdf }}" type="application/pdf" width="100%" height="600px" />
-                    <p><a href="/uploads/{{ generated_pdf }}" target="_blank">Open Reconstructed PDF in New Tab</a></p>
+                    <embed src="{{ url_for('uploaded_file', filename=generated_pdf) }}" type="application/pdf" width="100%" />
+                    <a href="{{ url_for('uploaded_file', filename=generated_pdf) }}" target="_blank">Open Full PDF</a>
                 {% else %}
-                    <p>Processing failed or is pending.</p>
+                    <p>Processing failed.</p>
                 {% endif %}
             </div>
 
-            <!-- 3. Template Structure PDF -->
+            <!-- Column 3: Reconstructed PDF (Structure Only) -->
             <div class="column">
-                <h3>Template PDF (Structure)</h3>
+                <h2>Reconstructed PDF (Template)</h2>
                 {% if structured_pdf %}
-                    <embed src="/uploads/{{ structured_pdf }}" type="application/pdf" width="100%" height="600px" />
-                    <p><a href="/uploads/{{ structured_pdf }}" target="_blank">Open Template PDF in New Tab</a></p>
+                    <embed src="{{ url_for('uploaded_file', filename=structured_pdf) }}" type="application/pdf" width="100%" />
+                    <a href="{{ url_for('uploaded_file', filename=structured_pdf) }}" target="_blank">Open Template PDF</a>
                 {% else %}
-                    <p>Processing failed or is pending.</p>
+                    <p>Processing failed.</p>
+                {% endif %}
+            </div>
+
+            <!-- Column 4: Mapped PDF -->
+            <div class="column">
+                <h2>Mapped PDF</h2>
+                {% if mapped_pdf %}
+                    <embed src="{{ url_for('uploaded_file', filename=mapped_pdf) }}" type="application/pdf" width="100%" />
+                    <a href="{{ url_for('uploaded_file', filename=mapped_pdf) }}" target="_blank">Open Mapped PDF</a>
+                {% else %}
+                    <p>Processing failed.</p>
                 {% endif %}
             </div>
         </div>
 
         <!-- HTML Code Sections -->
-        <div class="html-sections">
-            <div class="html-section">
-                <h3>AI Generated HTML Code (Reconstruction)</h3>
+        <div class="html-columns">
+            <div class="html-column">
+                <h3>HTML Code (Full Data)</h3>
                 {% if ai_response %}
                     <pre>{{ ai_response }}</pre>
                 {% else %}
-                    <p>No HTML generated yet.</p>
+                    <p>No HTML generated.</p>
                 {% endif %}
             </div>
 
-            <div class="html-section">
-                <h3>AI Generated HTML Code (Template)</h3>
+            <div class="html-column">
+                <h3>HTML Code (Template)</h3>
                 {% if structured_html %}
                     <pre>{{ structured_html }}</pre>
                 {% else %}
-                    <p>No HTML generated yet.</p>
+                    <p>No HTML generated.</p>
+                {% endif %}
+            </div>
+
+            <div class="html-column">
+                <h3>HTML Code (Mapped)</h3>
+                {% if mapped_html %}
+                    <pre>{{ mapped_html }}</pre>
+                {% else %}
+                    <p>No HTML generated.</p>
                 {% endif %}
             </div>
         </div>
         {% endif %}
+
     </div>
 
 </body>

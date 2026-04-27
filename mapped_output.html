@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head><title>Invoice Template</title></head>
+<body>
+    <h1>Invoice</h1>
+    <p>Invoice No: [INVOICE_NUMBER] -> Header > Header > Supplier Invoice Number</p>
+    <p>Date: [INVOICE_DATE] -> Header > Header > Supplier Invoice Date</p>
+    <p>Seller: [SELLER_NAME] -> Header > Billing Details > Name</p>
+    <p>Address: [SELLER_ADDRESS] -> Header > Billing Details > Address</p>
+    <p>Buyer: [BUYER_NAME] -> Header > Shipping Details > Name</p>
+    <p>Buyer Address: [BUYER_ADDRESS] -> Header > Shipping Details > Address</p>
+    <table>
+        <thead>
+            <tr><th>Item</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>[ITEM_DESCRIPTION_1] -> Items > Item Description > Description</td><td>[QTY_1] -> Items > Items > Qty</td><td>[UNIT_PRICE_1] -> Items > Items > Unit Price</td><td>[AMOUNT_1] -> Items > Items > Amount</td></tr>
+            <tr><td>[ITEM_DESCRIPTION_2] -> Items > Item Description > Description</td><td>[QTY_2] -> Items > Items > Qty</td><td>[UNIT_PRICE_2] -> Items > Items > Unit Price</td><td>[AMOUNT_2] -> Items > Items > Amount</td></tr>
+        </tbody>
+    </table>
+    <p>Subtotal: [SUBTOTAL] -> UNMAPPED</p>
+    <p>Tax: [TAX_AMOUNT] -> Items > Items > Tax Amount</p>
+    <p>Grand Total: [GRAND_TOTAL] -> Items > Items > Grand Total</p>
+    <p>Payment Terms: [PAYMENT_TERMS] -> Header > Header > Payment Terms</p>
+    <p>Unrecognized Field: [SOME_RANDOM_FIELD] -> UNMAPPED</p>
+    <div style="margin-top: 20px; border-top: 1px solid #000; padding-top: 10px;">
+        <h2>Summary</h2>
+        <ul>
+            <li>[INVOICE_NUMBER] -> Header > Header > Supplier Invoice Number</li>
+            <li>[INVOICE_DATE] -> Header > Header > Supplier Invoice Date</li>
+            <li>[SELLER_NAME] -> Header > Billing Details > Name</li>
+            <li>[SELLER_ADDRESS] -> Header > Billing Details > Address</li>
+            <li>[BUYER_NAME] -> Header > Shipping Details > Name</li>
+            <li>[BUYER_ADDRESS] -> Header > Shipping Details > Address</li>
+            <li>[ITEM_DESCRIPTION_1] -> Items > Item Description > Description</li>
+            <li>[QTY_1] -> Items > Items > Qty</li>
+            <li>[UNIT_PRICE_1] -> Items > Items > Unit Price</li>
+            <li>[AMOUNT_1] -> Items > Items > Amount</li>
+            <li>[ITEM_DESCRIPTION_2] -> Items > Item Description > Description</li>
+            <li>[QTY_2] -> Items > Items > Qty</li>
+            <li>[UNIT_PRICE_2] -> Items > Items > Unit Price</li>
+            <li>[AMOUNT_2] -> Items > Items > Amount</li>
+            <li>[SUBTOTAL] -> UNMAPPED</li>
+            <li>[TAX_AMOUNT] -> Items > Items > Tax Amount</li>
+            <li>[GRAND_TOTAL] -> Items > Items > Grand Total</li>
+            <li>[PAYMENT_TERMS] -> Header > Header > Payment Terms</li>
+            <li>[SOME_RANDOM_FIELD] -> UNMAPPED</li>
+        </ul>
+        <h3>Unmapped Placeholders</h3>
+        <ul>
+            <li>[SUBTOTAL]</li>
+            <li>[SOME_RANDOM_FIELD]</li>
+        </ul>
+    </div>
+</body>
+</html>

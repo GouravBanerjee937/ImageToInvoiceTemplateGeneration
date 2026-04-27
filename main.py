@@ -12,8 +12,7 @@ UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
 
 # WARNING: DO NOT hardcode API keys in production code. Use environment variables.
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY",
-                                "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")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 # --- Flask App Initialization ---
 app = Flask(__name__)
