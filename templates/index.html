@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .upload-section {
+            width: 100%;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
+        .display-section {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+        }
+        .column {
+            flex: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        img, embed {
+            max-width: 100%;
+            height: 600px;
+            margin-bottom: 10px;
+        }
+        .html-sections {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+        }
+        .html-section {
+            flex: 1;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            width: 100%;
+            height: 400px;
+            overflow-y: auto;
+            box-sizing: border-box;
+            font-size: 13px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Invoice Upload and AI Processing</h1>
+
+    <div class="container">
+        <div class="upload-section">
+            <h2>Upload an Invoice</h2>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/*,application/pdf" required>
+                <button type="submit">Upload & Process</button>
+            </form>
+            {% if error %}
+                <p class="error-message">{{ error }}</p>
+            {% endif %}
+        </div>
+
+        {% if filename %}
+        <div class="display-section">
+            <!-- 1. Original Upload -->
+            <div class="column">
+                <h3>Original Upload</h3>
+                {% if filename.lower().endswith('.pdf') %}
+                    <embed src="/uploads/{{ filename }}" type="application/pdf" width="100%" height="600px" />
+                {% else %}
+                    <img src="/uploads/{{ filename }}" alt="Uploaded Invoice">
+                {% endif %}
+            </div>
+
+            <!-- 2. Reconstructed PDF -->
+            <div class="column">
+                <h3>Reconstructed PDF</h3>
+                {% if generated_pdf %}
+                    <embed src="/uploads/{{ generated_pdf }}" type="application/pdf" width="100%" height="600px" />
+                    <p><a href="/uploads/{{ generated_pdf }}" target="_blank">Open Reconstructed PDF in New Tab</a></p>
+                {% else %}
+                    <p>Processing failed or is pending.</p>
+                {% endif %}
+            </div>
+
+            <!-- 3. Template Structure PDF -->
+            <div class="column">
+                <h3>Template PDF (Structure)</h3>
+                {% if structured_pdf %}
+                    <embed src="/uploads/{{ structured_pdf }}" type="application/pdf" width="100%" height="600px" />
+                    <p><a href="/uploads/{{ structured_pdf }}" target="_blank">Open Template PDF in New Tab</a></p>
+                {% else %}
+                    <p>Processing failed or is pending.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- HTML Code Sections -->
+        <div class="html-sections">
+            <div class="html-section">
+                <h3>AI Generated HTML Code (Reconstruction)</h3>
+                {% if ai_response %}
+                    <pre>{{ ai_response }}</pre>
+                {% else %}
+                    <p>No HTML generated yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="html-section">
+                <h3>AI Generated HTML Code (Template)</h3>
+                {% if structured_html %}
+                    <pre>{{ structured_html }}</pre>
+                {% else %}
+                    <p>No HTML generated yet.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
