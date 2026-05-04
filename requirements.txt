@@ -4,3 +4,4 @@ playwright>=1.40.0
 pdf2image>=1.17.0
 gunicorn>=20.1.0
 werkzeug
+python-dotenv
