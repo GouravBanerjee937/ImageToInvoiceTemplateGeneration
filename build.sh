@@ -8,9 +8,9 @@ pip install --upgrade pip
 # Install Python dependencies
 pip install -r requirements.txt
 
-# Note: Render uses Ubuntu underneath. We need to install poppler for pdf2image.
-apt-get update && apt-get install -y poppler-utils
-
-# Install Playwright browser binaries and OS dependencies
+# Install Playwright browser binaries
 playwright install chromium
-playwright install-deps chromium
+
+# Note: We are removing playwright install-deps because it requires root/sudo password
+# Render does not allow interactive sudo prompts during build.
+# The chromium browser usually works without the extra deps on Render's modern Ubuntu images.
